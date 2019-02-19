@@ -28,7 +28,6 @@ class ShopController extends Controller
 
     public function cart()
     {
-
         if (\request()->has('id')) {
             $products = \request()->session()->pull('id', []);
             if (($key = array_search(\request()->get('id'), $products)) !== false) {
@@ -36,8 +35,13 @@ class ShopController extends Controller
             }
             \request()->session()->put('id', $products);
         }
-            $query = Product::query();
-            $query->whereIn($query->getModel()->getKeyName(), \request()->session()->get('id'));
-            return view('shop.cart', ['products' => $query->get()]);
-        }
+        $query = Product::query();
+        $query->whereIn($query->getModel()->getKeyName(), \request()->session()->get('id'));
+        return view('shop.cart', ['products' => $query->get()]);
     }
+
+    public function products()
+    {
+        return view('shop.products', ['products' => Product::all()]);
+    }
+}

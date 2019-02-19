@@ -13,3 +13,4 @@
 
 Route::get('/', 'ShopController@index');
 Route::get('/cart', 'ShopController@cart');
+Route::get('products', 'ShopController@products')->middleware('admin');
