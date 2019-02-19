@@ -40,6 +40,6 @@
     <br>
     <input type="submit" name="checkout" value="{{ trans("Checkout") }}">
 </form>
-<a href="index.php">{{ trans("Go to index") }}</a>
+<a href="/">{{ trans("Go to index") }}</a>
 </body>
 </html>

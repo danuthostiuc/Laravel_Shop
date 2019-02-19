@@ -12,3 +12,4 @@
 */
 
 Route::get('/', 'ShopController@index');
+Route::get('/cart', 'ShopController@cart');

@@ -25,6 +25,6 @@
         </tr>
     @endforeach
 </table>
-<a href="cart.php"> {{ trans("Go to cart") }}</a>
+<a href="/cart"> {{ trans("Go to cart") }}</a>
 </body>
 </html>
