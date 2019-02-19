@@ -30,13 +30,13 @@
 
 
 <br>
-<form method="post" action="/">
+<form method="post" action="/index">
     @csrf
     <input type="text" name="name" value="{{ old("name") }}" placeholder="{{ trans("Name") }}" required>
     <br>
-    <input type="text" name="contact" value="{{ old("contact") }}" placeholder="{{ trans("Contact details") }}" required>
+    <input type="text" name="email" value="{{ old("email") }}" placeholder="{{ trans("Contact details") }}" required>
     <br>
-    <input type="text" name="comment" value="{{ old("comment") }}" placeholder="{{ trans("Comments") }}">
+    <input type="text" name="comment" value="{{ old("comment") }}" placeholder="{{ trans("Comments") }}" required>
     <br>
     <input type="submit" name="checkout" value="{{ trans("Checkout") }}">
 </form>

@@ -28,7 +28,7 @@
         </tr>
     @endforeach
 </table>
-<a href="product.php"> {{ trans("Add") }}</a>
-<a href="products.php?logout"> {{ trans("Logout") }}</a>
+<a href="product"> {{ trans("Add") }}</a>
+<a href="logout"> {{ trans("Logout") }}</a>
 </body>
 </html>

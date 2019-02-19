@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderCreated;
+use App\Order;
 use App\Product;
 use Illuminate\Http\Request;
 
@@ -40,8 +42,43 @@ class ShopController extends Controller
         return view('shop.cart', ['products' => $query->get()]);
     }
 
+    public function auth()
+    {
+        $attributes = \request()->validate([
+           'username' => 'required',
+           'password' => 'required'
+        ]);
+        if ( $attributes['username'] === env('ADMIN_USERNAME') && $attributes['password'] === env('ADMIN_PASSWORD')) {
+            \request()->session()->push('admin', []);
+            return view('shop.products', ['products' => Product::all()]);
+        } else {
+            return redirect('login');
+        }
+    }
+
+    public function logout()
+    {
+        \request()->session()->pull('admin', []);
+        return view('shop.login');
+    }
+
     public function products()
     {
         return view('shop.products', ['products' => Product::all()]);
+    }
+
+    public function checkout()
+    {
+        $attributes = \request()->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'comment' => 'required'
+        ]);
+
+        $order = Order::create($attributes);
+
+        \Mail::to('example@laravel.com')->send(
+            new OrderCreated($order)
+        );
     }
 }

@@ -13,4 +13,10 @@
 
 Route::get('/', 'ShopController@index');
 Route::get('/cart', 'ShopController@cart');
-Route::get('products', 'ShopController@products')->middleware('admin');
+Route::get('/login', function () {
+    return view('shop.login');
+});
+Route::get('/logout', 'ShopController@logout');
+Route::post('/products', 'ShopController@auth');
+Route::get('/products', 'ShopController@products')->middleware('admin');
+Route::post('/', 'ShopController@checkout');
