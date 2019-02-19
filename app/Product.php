@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $guard = [];
+    protected $fillable = ['title', 'description', 'price', 'image'];
 
-    public function order()
+    public function orders()
     {
-        return $this->hasMany(Order::class);
+        return $this->belongsToMany(Order::class);
     }
 }

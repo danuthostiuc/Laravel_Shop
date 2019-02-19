@@ -10,7 +10,7 @@ class Order extends Model
 
     protected $fillable = ['name', 'email', 'comment'];
 
-    public function project()
+    public function products()
     {
         $this->hasMany(Product::class);
     }

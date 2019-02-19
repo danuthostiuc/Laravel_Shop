@@ -30,7 +30,7 @@
 
 
 <br>
-<form method="post" action="/index">
+<form method="post" action="/">
     @csrf
     <input type="text" name="name" value="{{ old("name") }}" placeholder="{{ trans("Name") }}" required>
     <br>

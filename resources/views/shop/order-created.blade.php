@@ -1,13 +1,13 @@
 @component('mail::message')
 
-    #New Order {{ $order->name }}
+    #New Order  ->name
 
 
-    {{ $order->email }}
+    ->email
 
-    {{ $order->comment }}
+    ->comment
 
-    @component('mail::button', ['url' => url('/orders/' . $order->id)])
+    @component('mail::button', ['url' => url('/orders/')])
 
         View product
 

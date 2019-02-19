@@ -77,6 +77,7 @@ class ShopController extends Controller
 
         $order = Order::create($attributes);
 
+
         \Mail::to('example@laravel.com')->send(
             new OrderCreated($order)
         );

@@ -11,15 +11,15 @@ class OrderCreated extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $product;
+    public $order;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($product)
+    public function __construct($order)
     {
-        $this->product = $product;
+        $this->order = $order;
     }
 
     /**
