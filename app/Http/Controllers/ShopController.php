@@ -6,6 +6,7 @@ use App\Mail\OrderCreated;
 use App\Order;
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
 class ShopController extends Controller
 {
@@ -45,10 +46,10 @@ class ShopController extends Controller
     public function auth()
     {
         $attributes = \request()->validate([
-           'username' => 'required',
-           'password' => 'required'
+            'username' => 'required',
+            'password' => 'required'
         ]);
-        if ( $attributes['username'] === env('ADMIN_USERNAME') && $attributes['password'] === env('ADMIN_PASSWORD')) {
+        if ($attributes['username'] === env('ADMIN_USERNAME') && $attributes['password'] === env('ADMIN_PASSWORD')) {
             \request()->session()->push('admin', []);
             return view('shop.products', ['products' => Product::all()]);
         } else {
@@ -77,9 +78,62 @@ class ShopController extends Controller
 
         $order = Order::create($attributes);
 
-
         \Mail::to('example@laravel.com')->send(
             new OrderCreated($order)
         );
+        return redirect('order-created');
+    }
+
+    public function add()
+    {
+        $attributes = \request()->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'price' => 'required',
+            'image' => 'required'
+        ]);
+
+        $file = Input::file('image');
+        $destinationPath = public_path() . '/storage/';
+        $filename = uniqid() . $file->getClientOriginalName();
+        $file->move($destinationPath, $filename);
+
+        Product::create([
+            'title' => $attributes['title'],
+            'description' => $attributes['description'],
+            'price' => $attributes['price'],
+            'image' => $filename,
+        ]);
+        return redirect('/products');
+    }
+
+    public function delete()
+    {
+        $product = Product::select('image')->where('id', \request('id'))->get();
+        $product = $product->map(function ($p) {
+            return $p->only(['image']);
+        });
+        $image_path = public_path() . '/storage/' . $product->first()['image'];
+        if (\File::exists($image_path)) {
+            \File::delete($image_path);
+        }
+        Product::where('id', '=', \request('id'))->delete();
+        return redirect('/products');
+    }
+
+    public function edit()
+    {
+        $attributes = \request()->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'price' => 'required'
+        ]);
+        Product::where('id', '=', \request('id'))
+            ->update([
+                'title' => $attributes['title'],
+                'description' => $attributes['description'],
+                'price' => $attributes['price']
+            ]);
+        return redirect('/products');
     }
 }

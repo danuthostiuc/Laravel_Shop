@@ -20,3 +20,17 @@ Route::get('/logout', 'ShopController@logout');
 Route::post('/products', 'ShopController@auth');
 Route::get('/products', 'ShopController@products')->middleware('admin');
 Route::post('/', 'ShopController@checkout');
+
+
+Route::get('/product/', function () {
+    return view('shop.product-add');
+})->middleware('admin');
+Route::get('/product/{id}', function () {
+    return view('shop.product-edit');
+})->middleware('admin');
+
+Route::get('/products/{id}', 'ShopController@delete');
+
+Route::post('/products', 'ShopController@add');
+Route::post('/products/{id}', 'ShopController@edit');
+

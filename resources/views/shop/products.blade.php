@@ -20,15 +20,15 @@
                 </ul>
             </td>
             <td class="cp_img">
-                <a href="product.php?id={{ $row["id"] }}" class="">{{ trans("Edit") }}</a>
+                <a href="/product/{{ $row["id"] }}" class="">{{ trans("Edit") }}</a>
             </td>
             <td class="cp_img">
-                <a href="products.php?id={{ $row["id"] }}" class="">{{ trans("Delete") }}</a>
+                <a href="/products/{{ $row["id"] }}" class="">{{ trans("Delete") }}</a>
             </td>
         </tr>
     @endforeach
 </table>
-<a href="product"> {{ trans("Add") }}</a>
-<a href="logout"> {{ trans("Logout") }}</a>
+<a href="/product"> {{ trans("Add") }}</a>
+<a href="/logout"> {{ trans("Logout") }}</a>
 </body>
 </html>
