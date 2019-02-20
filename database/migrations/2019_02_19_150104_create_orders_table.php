@@ -14,7 +14,8 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->increments('id');
+            $table->engine = 'InnoDB';
+            $table->unsignedInteger('id')->autoIncrement();
             $table->string('name');
             $table->string('email');
             $table->string('comment');

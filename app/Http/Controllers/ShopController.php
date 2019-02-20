@@ -78,10 +78,10 @@ class ShopController extends Controller
 
         $order = Order::create($attributes);
 
-        \Mail::to('example@laravel.com')->send(
+        \Mail::to('example@laravel.com')->queue(
             new OrderCreated($order)
         );
-        return redirect('order-created');
+        return redirect('/');
     }
 
     public function add()
@@ -135,5 +135,10 @@ class ShopController extends Controller
                 'price' => $attributes['price']
             ]);
         return redirect('/products');
+    }
+
+    public function orders()
+    {
+        return view('shop.orders', ['orders' => Order::all()]);
     }
 }
