@@ -79,13 +79,14 @@ class ShopController extends Controller
 
         $order = Order::create($attributes);
         $products = \request()->session()->get('id');
+
         foreach ($products as $value) {
             DB::table('order_product')->insert([
                 ['order_id' => $order->id, 'product_id' => $value]
             ]);
         }
 
-        \Mail::to('example@laravel.com')->queue(
+        \Mail::to('example@laravel.com')->send(
             new OrderCreated($order)
         );
         return redirect('/');
@@ -163,8 +164,6 @@ class ShopController extends Controller
             ->join('products', 'products.id', '=', 'order_product.product_id')
             ->where('orders.id', \request('id'))
             ->get();
-
-        //dd($order);
 
         return view('shop.order', ['order' => $order]);
     }
