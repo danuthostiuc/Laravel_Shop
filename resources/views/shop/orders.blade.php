@@ -11,22 +11,19 @@
     @foreach ($orders as $row)
         <tr>
             <td>
-                <a href="/order/{{$row["id"] }}">{{ $row["id"] }}</a>
+                <a href="/order/{{ $row->id }}">{{ $row->id }}</a>
             </td>
             <td>
-                {{ $row["name"] }}
+                {{ $row->name }}
             </td>
             <td>
-                {{ $row["email"] }}
+                {{ $row->email }}
             </td>
             <td>
-                {{ $row["comment"] }}
+                {{ $row->comment }}
             </td>
             <td>
-                {{ $row["creation_date"] }}
-            </td>
-            <td>
-                {{ $row["total"] }}
+                {{ $row->total }}
             </td>
         </tr>
     @endforeach

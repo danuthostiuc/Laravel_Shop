@@ -9,28 +9,28 @@
 <table>
     <tr>
         <td rowspan="{{ count($order) + 1 }}" class="cp_img">
-            {{ $order[0]["name"] }}
+            {{ $order->first()->name }}
         </td>
         <td rowspan="{{ count($order) + 1 }}" class="cp_img">
-            {{ $order[1]["email"] }}
+            {{ $order->first()->email }}
         </td>
         <td rowspan="{{ count($order) + 1 }}" class="cp_img">
-            {{ $order[2]["comment"] }}
+            {{ $order->first()->comment }}
         </td>
     </tr>
     @foreach ($order as $row)
         <tr>
             <td class="cp_img">
-                <img src="{{ \Storage::url($row["image"]) }}"/>
+                <img src="{{ \Storage::url($row->image) }}"/>
             </td>
             <td class="cp_img">
-                {{ $row["title"] }}
+                {{ $row->title }}
             </td>
             <td class="cp_img">
-                {{ $row["description"] }}
+                {{ $row->description }}
             </td>
             <td class="cp_img">
-                {{ $row["price"] }}
+                {{ $row->price }}
             </td>
         </tr>
     @endforeach

@@ -6,6 +6,7 @@ use App\Mail\OrderCreated;
 use App\Order;
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 
 class ShopController extends Controller
@@ -77,6 +78,12 @@ class ShopController extends Controller
         ]);
 
         $order = Order::create($attributes);
+        $products = \request()->session()->get('id');
+        foreach ($products as $value) {
+            DB::table('order_product')->insert([
+                ['order_id' => $order->id, 'product_id' => $value]
+            ]);
+        }
 
         \Mail::to('example@laravel.com')->queue(
             new OrderCreated($order)
@@ -139,6 +146,26 @@ class ShopController extends Controller
 
     public function orders()
     {
-        return view('shop.orders', ['orders' => Order::all()]);
+        $order = collect(DB::table('orders')
+            ->select('orders.*', DB::raw('SUM(products.price) as total'))
+            ->join('order_product', 'orders.id', '=', 'order_product.order_id')
+            ->join('products', 'products.id', '=', 'order_product.product_id')
+            ->groupBy('orders.id')->get());
+
+        return view('shop.orders', ['orders' => $order]);
+    }
+
+    public function order()
+    {
+        $order = DB::table('orders')
+            ->select('name', 'email', 'comment', 'image', 'title', 'description', 'price')
+            ->join('order_product', 'orders.id', '=', 'order_product.order_id')
+            ->join('products', 'products.id', '=', 'order_product.product_id')
+            ->where('orders.id', \request('id'))
+            ->get();
+
+        //dd($order);
+
+        return view('shop.order', ['order' => $order]);
     }
 }
