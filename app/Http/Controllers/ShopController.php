@@ -46,7 +46,7 @@ class ShopController extends Controller
         return view('shop.cart', ['products' => $query->get()]);
     }
 
-    public function auth()
+    public function login()
     {
         $attributes = \request()->validate([
             'username' => 'required',
