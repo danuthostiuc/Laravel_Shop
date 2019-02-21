@@ -27,6 +27,7 @@ class ShopController extends Controller
         }
         $query = Product::query();
         $query->whereNotIn($query->getModel()->getKeyName(), \request()->session()->get('id'));
+
         return view('shop.index', ['products' => $query->get()]);
     }
 
@@ -41,6 +42,7 @@ class ShopController extends Controller
         }
         $query = Product::query();
         $query->whereIn($query->getModel()->getKeyName(), \request()->session()->get('id'));
+
         return view('shop.cart', ['products' => $query->get()]);
     }
 
@@ -61,6 +63,7 @@ class ShopController extends Controller
     public function logout()
     {
         \request()->session()->pull('admin', []);
+
         return view('shop.login');
     }
 
@@ -89,6 +92,7 @@ class ShopController extends Controller
         \Mail::to('example@laravel.com')->send(
             new OrderCreated($order)
         );
+
         return redirect('/');
     }
 
@@ -112,6 +116,7 @@ class ShopController extends Controller
             'price' => $attributes['price'],
             'image' => $filename,
         ]);
+
         return redirect('/products');
     }
 
@@ -126,6 +131,7 @@ class ShopController extends Controller
             \File::delete($image_path);
         }
         Product::where('id', '=', \request('id'))->delete();
+
         return redirect('/products');
     }
 
@@ -142,6 +148,7 @@ class ShopController extends Controller
                 'description' => $attributes['description'],
                 'price' => $attributes['price']
             ]);
+
         return redirect('/products');
     }
 
