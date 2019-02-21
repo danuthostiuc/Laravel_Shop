@@ -17,11 +17,11 @@ Route::get('/login', function () {
     return view('shop.login');
 });
 
+
+
 Route::get('/logout', 'ShopController@logout');
-Route::post('/products', 'ShopController@auth');
 Route::post('/', 'ShopController@checkout');
-Route::post('/products', 'ShopController@add');
-Route::post('/products/{id}', 'ShopController@edit');
+Route::post('/products', 'ShopController@auth');
 
 Route::middleware(['admin'])->group(function () {
 
@@ -40,4 +40,9 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/orders', 'ShopController@orders');
 
     Route::get('/order/{id}', 'ShopController@order');
+
+    //Route::post('/products', 'ShopController@add');
+
+    Route::post('/products/{id}', 'ShopController@edit');
+
 });

@@ -54,9 +54,9 @@ class ShopController extends Controller
         ]);
         if ($attributes['username'] === env('ADMIN_USERNAME') && $attributes['password'] === env('ADMIN_PASSWORD')) {
             \request()->session()->push('admin', []);
-            return view('shop.products', ['products' => Product::all()]);
+            return redirect('/products');
         } else {
-            return redirect('login');
+            return redirect('/login');
         }
     }
 
@@ -158,7 +158,8 @@ class ShopController extends Controller
             ->select('orders.*', DB::raw('SUM(products.price) as total'))
             ->join('order_product', 'orders.id', '=', 'order_product.order_id')
             ->join('products', 'products.id', '=', 'order_product.product_id')
-            ->groupBy('orders.id')->get());
+            ->groupBy('orders.id')
+            ->get());
 
         return view('shop.orders', ['orders' => $order]);
     }
