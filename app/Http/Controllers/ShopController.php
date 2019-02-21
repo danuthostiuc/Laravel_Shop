@@ -81,16 +81,19 @@ class ShopController extends Controller
         ]);
 
         $order = Order::create($attributes);
-        $products = \request()->session()->get('id');
+        $product_ids = \request()->session()->get('id');
 
-        foreach ($products as $value) {
+        foreach ($product_ids as $value) {
             DB::table('order_product')->insert([
                 ['order_id' => $order->id, 'product_id' => $value]
             ]);
         }
 
+        $products = Product::query();
+        $products->whereIn($products->getModel()->getKeyName(), $product_ids);
+
         \Mail::to('example@laravel.com')->send(
-            new OrderCreated($order)
+            new OrderCreated($order, $products)
         );
 
         return redirect('/');

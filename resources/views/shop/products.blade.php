@@ -1,6 +1,6 @@
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/style.css') }}">
 </head>
 <body>
 <h1>
@@ -10,20 +10,20 @@
     @foreach ($products as $row)
         <tr>
             <td class="cp_img">
-                <img src="{{ \Storage::url($row["image"]) }}"/>
+                <img src="{{ \Storage::url($row->image) }}"/>
             </td>
             <td class="cp_img">
                 <ul>
-                    <li>{{ $row["title"] }}</li>
-                    <li>{{ $row["description"] }}</li>
-                    <li>{{ $row["price"] }}</li>
+                    <li>{{ $row->title }}</li>
+                    <li>{{ $row->description }}</li>
+                    <li>{{ $row->price }}</li>
                 </ul>
             </td>
             <td class="cp_img">
-                <a href="/product/{{ $row["id"] }}" class="">{{ trans("Edit") }}</a>
+                <a href="/product/{{ $row->id }}" class="">{{ trans("Edit") }}</a>
             </td>
             <td class="cp_img">
-                <a href="/products/{{ $row["id"] }}" class="">{{ trans("Delete") }}</a>
+                <a href="/products/{{ $row->id }}" class="">{{ trans("Delete") }}</a>
             </td>
         </tr>
     @endforeach

@@ -1,6 +1,6 @@
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/style.css') }}">
 </head>
 <body>
 <h1>
@@ -24,13 +24,13 @@
                 <img src="{{ \Storage::url($row->image) }}"/>
             </td>
             <td class="cp_img">
-                {{ $row->title }}
+                {{  $row->title }}
             </td>
             <td class="cp_img">
                 {{ $row->description }}
             </td>
             <td class="cp_img">
-                {{ $row->price }}
+                {{  $row->price }}
             </td>
         </tr>
     @endforeach
