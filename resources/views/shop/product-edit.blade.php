@@ -7,16 +7,22 @@
     {{ trans("Product") }}
 </h1>
 
-<form method="post" action="/products/{{ \request('id') }}">
+<form method="post" enctype="multipart/form-data" action="/products/{{ \request('id') }}">
     @csrf
-    <input type="text" name="title" value="{{ old('name') }}" placeholder="{{ trans("Title") }}" required>
+    <input type="text" name="title" value="{{ old('name', $product->first()->title) }}" placeholder="{{ trans("Title") }}"
+           required>
     <br>
-    <input type="text" name="description" value="{{ old('description') }}" placeholder="{{ trans("Description") }}" required>
+    <input type="text" name="description" value="{{ old('description', $product->first()->description) }}"
+           placeholder="{{ trans("Description") }}" required>
     <br>
-    <input type="number" name="price" value="{{ old('price') }}" placeholder="{{ trans("Price") }}" required>
+    <input type="number" name="price" value="{{ old('price', $product->first()->price) }}" placeholder="{{ trans("Price") }}"
+           required>
+    <br>
+    <input type="file" name="image" accept=".png, .gif, .jpeg, .jpg">
     <br>
     <a href="/products">{{ trans("Products") }}</a>
     <input type="submit" name="save" value="{{ trans("Save") }}">
+    @include('shop.errors')
 </form>
 
 </body>

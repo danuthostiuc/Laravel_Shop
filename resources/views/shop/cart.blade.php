@@ -22,7 +22,6 @@
             </td>
             <td class="cp_img">
                 <a href="?id={{ $row->id }}">{{ trans("Remove") }}</a>
-
             </td>
         </tr>
     @endforeach
@@ -30,7 +29,7 @@
 
 
 <br>
-<form method="post" action="/">
+<form method="post" action="/checkout">
     @csrf
     <input type="text" name="name" value="{{ old("name") }}" placeholder="{{ trans("Name") }}" required>
     <br>
@@ -39,6 +38,7 @@
     <input type="text" name="comment" value="{{ old("comment") }}" placeholder="{{ trans("Comments") }}" required>
     <br>
     <input type="submit" name="checkout" value="{{ trans("Checkout") }}">
+    @include('shop.errors')
 </form>
 <a href="/">{{ trans("Go to index") }}</a>
 </body>

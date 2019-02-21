@@ -19,11 +19,11 @@ Route::get('/login', function () {
 
 Route::post('/orders', 'ShopController@login');
 Route::get('/logout', 'ShopController@logout');
-Route::post('/', 'ShopController@checkout');
+Route::post('checkout/', 'ShopController@checkout');
 
 Route::middleware(['admin'])->group(function () {
 
-    Route::get('/products', 'ShopController@products');
+    Route::get('/products', 'ProductController@products');
 
     Route::get('/product', function () {
         return view('shop.product-add');
@@ -33,14 +33,16 @@ Route::middleware(['admin'])->group(function () {
         return view('shop.product-edit');
     });
 
-    Route::get('/products/{id}', 'ShopController@delete');
+    Route::get('/products/{id}', 'ProductController@delete');
 
-    Route::get('/orders', 'ShopController@orders');
+    Route::get('/orders', 'ProductController@orders');
 
-    Route::get('/order/{id}', 'ShopController@order');
+    Route::get('/order/{id}', 'ProductController@order');
 
-    Route::post('/products', 'ShopController@add');
+    Route::post('/products', 'ProductController@add');
 
-    Route::post('/products/{id}', 'ShopController@edit');
+    Route::post('/products/{id}', 'ProductController@update');
+
+    Route::get('/product/{id}', 'ProductController@edit');
 
 });

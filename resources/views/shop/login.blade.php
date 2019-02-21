@@ -13,6 +13,7 @@
     <input type="password" name="password" value="{{ old('password') }}" placeholder="{{ trans("Password") }}" required>
     <br>
     <input type="submit" name="submit" value="{{ trans("Login") }}">
+    @include('shop.errors')
 </form>
 </body>
 </html>

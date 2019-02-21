@@ -1,27 +1,23 @@
-@component('mail::message')
 #New Order<br>
 {{ $order->name }}
 {{ $order->email }}
 {{ $order->comment }}
-@component('mail::button', ['url' => url('/order') . '/'.  $order->id])
-View order<br>
-<table>
-@foreach ($products as $row)
-<tr>
-<td class="cp_img">
-<img src="{{ \Storage::url($row->image) }}"/>
-</td>
-<td class="cp_img">
-<ul>
-<li>{{ $row->title }}</li>
-<li>{{ $row->description }}</li>
-<li>{{ $row->price }}</li>
-</ul>
-</td>
-</tr>
-@endforeach
-</table>
-@endcomponent
+    View order<br>
+    <table>
+        @foreach ($products as $product)
+            <tr>
+                <td class="cp_img">
+                    <img src="{{ \Storage::url($product->image) }}"/>
+                </td>
+                <td class="cp_img">
+                    <ul>
+                        <li>{{ $product->title }}</li>
+                        <li>{{ $product->description }}</li>
+                        <li>{{ $product->price }}</li>
+                    </ul>
+                </td>
+            </tr>
+        @endforeach
+    </table>
 Thanks,<br>
 {{ config('app.name') }}
-@endcomponent
