@@ -59,7 +59,7 @@ class ProductController extends Controller
 
             $file = Input::file('image');
             $destinationPath = public_path() . '/storage/';
-            $filename = uniqid() . $file->getClientOriginalName();
+            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
             $file->move($destinationPath, $filename);
 
             Product::query()->where('id', \request('id'))
