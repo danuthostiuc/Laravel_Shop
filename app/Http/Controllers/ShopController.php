@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Mail\OrderCreated;
 use App\Order;
 use App\Product;
-use Illuminate\Http\Request;
 
 class ShopController extends Controller
 {
@@ -75,7 +74,7 @@ class ShopController extends Controller
         $attributes = \request()->validate([
             'name' => 'required',
             'email' => 'required',
-            'comment' => 'required'
+            'comment' => 'sometimes'
         ]);
 
         $model = new Order;
@@ -83,6 +82,9 @@ class ShopController extends Controller
 
         $product_ids = \request()->session()->get('cart');
 
+        /**
+         * @var Order $order
+         */
         if ($product_ids) {
             $order->products()->attach($product_ids);
         }

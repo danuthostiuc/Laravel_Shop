@@ -1,6 +1,6 @@
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
 <h1>
@@ -27,18 +27,17 @@
     @endforeach
 </table>
 
-
 <br>
 <form method="post" action="/checkout">
     @csrf
+    @include('shop.errors')
     <input type="text" name="name" value="{{ old("name") }}" placeholder="{{ trans("Name") }}" required>
     <br>
     <input type="text" name="email" value="{{ old("email") }}" placeholder="{{ trans("Contact details") }}" required>
     <br>
-    <input type="text" name="comment" value="{{ old("comment") }}" placeholder="{{ trans("Comments") }}" required>
+    <input type="text" name="comment" value="{{ old("comment") }}" placeholder="{{ trans("Comments") }}">
     <br>
     <input type="submit" name="checkout" value="{{ trans("Checkout") }}">
-    @include('shop.errors')
 </form>
 <a href="/">{{ trans("Go to index") }}</a>
 </body>

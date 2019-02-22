@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Product;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
 
@@ -15,7 +14,7 @@ class ProductController extends Controller
             'title' => 'required',
             'description' => 'required',
             'price' => 'required',
-            'image' => 'required'
+            'image' => 'required|image'
         ]);
 
         $file = Input::file('image');
@@ -40,22 +39,19 @@ class ProductController extends Controller
             'title' => 'required',
             'description' => 'required',
             'price' => 'required',
-            'image' => 'sometimes|required'
+            'image' => 'sometimes|required|image'
         ]);
 
         if (\request()->exists('image')) {
 
             $model = new Product;
-            $product = $model->newQuery()
+            $result = $model->newQuery()
                 ->select('image')
                 ->where('id', \request('id'))
                 ->get();
 
-            $product = $product->map(function ($p) {
-                return $p->only(['image']);
-            });
-
-            $image_path = public_path() . '/storage/' . $product->first()['image'];
+            $image_name = $result->pluck('image');
+            $image_path = public_path() . '/storage/' . $image_name->first();
 
             if (\File::exists($image_path)) {
                 \File::delete($image_path);
@@ -81,6 +77,7 @@ class ProductController extends Controller
                     'price' => $attributes['price'],
                 ]);
         }
+
         return redirect('/products');
     }
 
@@ -97,16 +94,13 @@ class ProductController extends Controller
     public function delete()
     {
         $model = new Product;
-        $product = $model->newQuery()
+        $result = $model->newQuery()
             ->select('image')
             ->where('id', \request('id'))
             ->get();
 
-        $product = $product->map(function ($p) {
-            return $p->only(['image']);
-        });
-
-        $image_path = public_path() . '/storage/' . $product->first()['image'];
+        $image_name = $result->pluck('image');
+        $image_path = public_path() . '/storage/' . $image_name->first();
 
         if (\File::exists($image_path)) {
             \File::delete($image_path);
@@ -126,14 +120,14 @@ class ProductController extends Controller
 
     public function orders()
     {
-        $order = collect(DB::table('orders')
+        $orders = collect(DB::table('orders')
             ->select('orders.*', DB::raw('SUM(products.price) as total'))
             ->join('order_product', 'orders.id', '=', 'order_product.order_id')
             ->join('products', 'products.id', '=', 'order_product.product_id')
             ->groupBy('orders.id')
             ->get());
 
-        return view('shop.orders', ['orders' => $order]);
+        return view('shop.orders', ['orders' => $orders]);
     }
 
     public function order()
