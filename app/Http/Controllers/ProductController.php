@@ -14,7 +14,7 @@ class ProductController extends Controller
             'title' => 'required',
             'description' => 'required',
             'price' => 'required',
-            'image' => 'required|image'
+            'image.*' => 'required|mimes:png, gif, jpeg, jpg'
         ]);
 
         $file = Input::file('image');
@@ -39,7 +39,7 @@ class ProductController extends Controller
             'title' => 'required',
             'description' => 'required',
             'price' => 'required',
-            'image' => 'sometimes|required|image'
+            'image.*' => 'sometimes|required|mimes:png, gif, jpeg, jpg'
         ]);
 
         if (\request()->exists('image')) {
@@ -70,6 +70,7 @@ class ProductController extends Controller
                     'image' => $filename
                 ]);
         } else {
+
             Product::query()->where('id', \request('id'))
                 ->update([
                     'title' => $attributes['title'],

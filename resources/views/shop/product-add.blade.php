@@ -16,7 +16,7 @@
     <br>
     <input type="number" name="price" value="{{ old('price') }}" placeholder="{{ trans("Price") }}" required>
     <br>
-    <input type="file" name="image" accept=".png, .gif, .jpeg, .jpg, .bmp, .svg">
+    <input type="file" name="image" accept=".png, .gif, .jpeg, .jpg">
     <br>
     <a href="/products">{{ trans("Products") }}</a>
     <input type="submit" name="save" value="{{ trans("Save") }}">

@@ -79,7 +79,6 @@ class ShopController extends Controller
 
         $model = new Order;
         $order = $model->newQuery()->create($attributes);
-
         $product_ids = \request()->session()->get('cart');
 
         /**
