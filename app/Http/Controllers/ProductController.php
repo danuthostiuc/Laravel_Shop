@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Order;
 use App\Product;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
@@ -133,12 +134,7 @@ class ProductController extends Controller
 
     public function order()
     {
-        $order = DB::table('orders')
-            ->select('name', 'email', 'comment', 'image', 'title', 'description', 'price')
-            ->join('order_product', 'orders.id', '=', 'order_product.order_id')
-            ->join('products', 'products.id', '=', 'order_product.product_id')
-            ->where('orders.id', \request('id'))
-            ->get();
+        $order = Order::with('products')->find(\request('id'));
 
         return view('shop.order', ['order' => $order]);
     }
