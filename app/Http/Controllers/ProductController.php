@@ -46,12 +46,9 @@ class ProductController extends Controller
         if (\request()->exists('image')) {
 
             $model = new Product;
-            $result = $model->newQuery()
-                ->select('image')
+            $image_name = $model->newQuery()
                 ->where('id', \request('id'))
-                ->get();
-
-            $image_name = $result->pluck('image');
+                ->pluck('image');
             $image_path = public_path() . '/storage/' . $image_name->first();
 
             if (\File::exists($image_path)) {
@@ -96,12 +93,9 @@ class ProductController extends Controller
     public function delete()
     {
         $model = new Product;
-        $result = $model->newQuery()
-            ->select('image')
+        $image_name = $model->newQuery()
             ->where('id', \request('id'))
-            ->get();
-
-        $image_name = $result->pluck('image');
+            ->pluck('image');
         $image_path = public_path() . '/storage/' . $image_name->first();
 
         if (\File::exists($image_path)) {
