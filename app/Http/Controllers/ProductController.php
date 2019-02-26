@@ -113,23 +113,4 @@ class ProductController extends Controller
     {
         return view('shop.products', ['products' => Product::all()]);
     }
-
-    public function orders()
-    {
-        $orders = collect(DB::table('orders')
-            ->select('orders.*', DB::raw('SUM(products.price) as total'))
-            ->join('order_product', 'orders.id', '=', 'order_product.order_id')
-            ->join('products', 'products.id', '=', 'order_product.product_id')
-            ->groupBy('orders.id')
-            ->get());
-
-        return view('shop.orders', ['orders' => $orders]);
-    }
-
-    public function order()
-    {
-        $order = Order::with('products')->find(\request('id'));
-
-        return view('shop.order', ['order' => $order]);
-    }
 }
