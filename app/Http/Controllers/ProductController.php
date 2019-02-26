@@ -15,7 +15,7 @@ class ProductController extends Controller
             'title' => 'required',
             'description' => 'required',
             'price' => 'required',
-            'image.*' => 'required|mimes:png, gif, jpeg, jpg'
+            'image' => 'required|mimes:png,gif,jpeg,jpg'
         ]);
 
         $file = Input::file('image');
@@ -40,7 +40,7 @@ class ProductController extends Controller
             'title' => 'required',
             'description' => 'required',
             'price' => 'required',
-            'image.*' => 'sometimes|required|mimes:png, gif, jpeg, jpg'
+            'image' => 'sometimes|required|mimes:png,gif,jpeg,jpg'
         ]);
 
         if (\request()->exists('image')) {

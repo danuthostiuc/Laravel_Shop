@@ -21,7 +21,7 @@ class OrderController extends Controller
 
     public function order()
     {
-        $order = Order::with('products')->find(\request('id'));
+        $order = Order::with('products')->findOrFail(\request('id'));
 
         return view('shop.order', ['order' => $order]);
     }
