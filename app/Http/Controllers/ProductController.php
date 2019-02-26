@@ -14,7 +14,7 @@ class ProductController extends Controller
         $attributes = \request()->validate([
             'title' => 'required',
             'description' => 'required',
-            'price' => 'required',
+            'price' => 'required|numeric|min:1|max:1000000',
             'image' => 'required|mimes:png,gif,jpeg,jpg'
         ]);
 
@@ -39,8 +39,8 @@ class ProductController extends Controller
         $attributes = \request()->validate([
             'title' => 'required',
             'description' => 'required',
-            'price' => 'required',
-            'image' => 'sometimes|required|mimes:png,gif,jpeg,jpg'
+            'price' => 'required|numeric|min:1|max:1000000',
+            'image.*' => 'sometimes|required|mimes:png,gif,jpeg,jpg'
         ]);
 
         if (\request()->exists('image')) {
