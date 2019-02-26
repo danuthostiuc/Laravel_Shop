@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Order;
+
 use App\Product;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\DB;
+
 
 class ProductController extends Controller
 {
