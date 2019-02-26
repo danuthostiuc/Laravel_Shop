@@ -29,10 +29,6 @@ Route::middleware(['admin'])->group(function () {
         return view('shop.product-add');
     });
 
-    Route::get('/product/{id}', function () {
-        return view('shop.product-edit');
-    });
-
     Route::get('/products/{id}', 'ProductController@delete');
 
     Route::get('/orders', 'OrderController@orders');
