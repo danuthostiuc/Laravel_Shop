@@ -77,8 +77,11 @@ class ShopController extends Controller
             'comment' => 'sometimes'
         ]);
 
-        $model = new Order;
-        $order = $model->newQuery()->create($attributes);
+        $order = new Order;
+        $order->name = $attributes['name'];
+        $order->email = $attributes['email'];
+        $order->comment = $attributes['comment'];
+        $order->save();
         $product_ids = \request()->session()->get('cart');
 
         /**
