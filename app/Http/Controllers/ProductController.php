@@ -24,7 +24,6 @@ class ProductController extends Controller
             $destinationPath = public_path() . '/storage/';
             $filename = uniqid() . '.' . $file->getClientOriginalExtension();
             $file->move($destinationPath, $filename);
-
             $product = new Product;
             $product->title = $attributes['title'];
             $product->description = $attributes['description'];
@@ -42,19 +41,15 @@ class ProductController extends Controller
 
             if (\request()->exists('image')) {
 
-
                 $image_name = $product->image;
                 $image_path = public_path() . '/storage/' . $image_name;
-
                 if (\File::exists($image_path)) {
                     \File::delete($image_path);
                 }
-
                 $file = Input::file('image');
                 $destinationPath = public_path() . '/storage/';
                 $filename = uniqid() . '.' . $file->getClientOriginalExtension();
                 $file->move($destinationPath, $filename);
-
                 $product->title = $attributes['title'];
                 $product->description = $attributes['description'];
                 $product->price = $attributes['price'];
@@ -88,11 +83,9 @@ class ProductController extends Controller
         $product = $model->newQuery()
             ->findOrFail(\request('id'));
         $image_path = public_path() . '/storage/' . $product->image;
-
         if (\File::exists($image_path)) {
             \File::delete($image_path);
         }
-
         $product->delete();
 
         return redirect('/products');
