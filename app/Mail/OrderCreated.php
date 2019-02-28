@@ -13,10 +13,12 @@ class OrderCreated extends Mailable
 
     public $order;
     public $products;
+
     /**
      * Create a new message instance.
      *
-     * @return void
+     * @param $order
+     * @param $products
      */
     public function __construct($order, $products)
     {
