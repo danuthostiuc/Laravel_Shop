@@ -15,96 +15,85 @@ class ProductController extends Controller
             'title' => 'required',
             'description' => 'required',
             'price' => 'required|numeric|min:1|max:1000000',
-            'image' => 'required|mimes:png,gif,jpeg,jpg'
+            'image' => ((!\request('id')) ? 'required|mimes:png,gif,jpeg,jpg' : 'sometimes|required|mimes:png,gif,jpeg,jpg')
         ]);
 
-        $file = Input::file('image');
-        $destinationPath = public_path() . '/storage/';
-        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-        $file->move($destinationPath, $filename);
-
-        $model = new Product;
-        $model->newQuery()->create([
-            'title' => $attributes['title'],
-            'description' => $attributes['description'],
-            'price' => $attributes['price'],
-            'image' => $filename,
-        ]);
-
-        return redirect('/products');
-    }
-
-    public function update()
-    {
-        $attributes = \request()->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'price' => 'required|numeric|min:1|max:1000000',
-            'image.*' => 'sometimes|required|mimes:png,gif,jpeg,jpg'
-        ]);
-
-        if (\request()->exists('image')) {
-
-            $model = new Product;
-            $image_name = $model->newQuery()
-                ->where('id', \request('id'))
-                ->pluck('image');
-            $image_path = public_path() . '/storage/' . $image_name->first();
-
-            if (\File::exists($image_path)) {
-                \File::delete($image_path);
-            }
+        if (!\request('id')) {
 
             $file = Input::file('image');
             $destinationPath = public_path() . '/storage/';
             $filename = uniqid() . '.' . $file->getClientOriginalExtension();
             $file->move($destinationPath, $filename);
 
-            Product::query()->where('id', \request('id'))
-                ->update([
-                    'title' => $attributes['title'],
-                    'description' => $attributes['description'],
-                    'price' => $attributes['price'],
-                    'image' => $filename
-                ]);
+            $product = new Product;
+            $product->title = $attributes['title'];
+            $product->description = $attributes['description'];
+            $product->price = $attributes['price'];
+            $product->image = $filename;
+            $product->save();
+
+            return redirect('/products');
+
         } else {
 
-            Product::query()->where('id', \request('id'))
-                ->update([
-                    'title' => $attributes['title'],
-                    'description' => $attributes['description'],
-                    'price' => $attributes['price'],
-                ]);
-        }
+            $model = new Product;
+            $product = $model->newQuery()
+                ->findOrFail(\request('id'));
 
-        return redirect('/products');
+            if (\request()->exists('image')) {
+
+
+                $image_name = $product->image;
+                $image_path = public_path() . '/storage/' . $image_name;
+
+                if (\File::exists($image_path)) {
+                    \File::delete($image_path);
+                }
+
+                $file = Input::file('image');
+                $destinationPath = public_path() . '/storage/';
+                $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->move($destinationPath, $filename);
+
+                $product->title = $attributes['title'];
+                $product->description = $attributes['description'];
+                $product->price = $attributes['price'];
+                $product->image = $filename;
+                $product->save();
+
+            } else {
+
+                $product->title = $attributes['title'];
+                $product->description = $attributes['description'];
+                $product->price = $attributes['price'];
+                $product->save();
+
+            }
+            return redirect('/products');
+        }
     }
 
     public function edit()
     {
         $model = new Product;
         $product = $model->newQuery()
-            ->where('id', '=', \request('id'))
-            ->get();
+            ->findOrFail(\request('id'));
 
-        return view('shop.product-edit', ['product' => $product]);
+        return view('shop.product', ['product' => $product]);
     }
 
     public function delete()
     {
         $model = new Product;
-        $image_name = $model->newQuery()
-            ->where('id', \request('id'))
-            ->pluck('image');
-        $image_path = public_path() . '/storage/' . $image_name->first();
+        $product = $model->newQuery()
+            ->findOrFail(\request('id'));
+        $image_path = public_path() . '/storage/' . $product->image;
 
         if (\File::exists($image_path)) {
             \File::delete($image_path);
         }
 
-        $model->newQuery()
-            ->where('id', '=', \request('id'))
-            ->delete();
+        $product->delete();
 
         return redirect('/products');
     }

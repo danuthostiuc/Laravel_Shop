@@ -26,7 +26,7 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/products', 'ProductController@products');
 
     Route::get('/product', function () {
-        return view('shop.product-add');
+        return view('shop.product');
     });
 
     Route::get('/products/{id}', 'ProductController@delete');
@@ -37,7 +37,7 @@ Route::middleware(['admin'])->group(function () {
 
     Route::post('/products', 'ProductController@add');
 
-    Route::post('/products/{id}', 'ProductController@update');
+    Route::post('/products/{id}', 'ProductController@add');
 
     Route::get('/product/{id}', 'ProductController@edit');
 
