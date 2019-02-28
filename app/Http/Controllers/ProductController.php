@@ -15,7 +15,7 @@ class ProductController extends Controller
             'title' => 'required',
             'description' => 'required',
             'price' => 'required|numeric|min:1|max:1000000',
-            'image' => ((!\request('id')) ? 'required|mimes:png,gif,jpeg,jpg' : 'sometimes|required|mimes:png,gif,jpeg,jpg')
+            'image' => ((!\request('id')) ? '' : 'sometimes|') . 'required|mimes:png,gif,jpeg,jpg',
         ]);
 
         if (!\request('id')) {
