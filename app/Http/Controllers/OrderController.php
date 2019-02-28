@@ -16,13 +16,13 @@ class OrderController extends Controller
             ->groupBy('orders.id')
             ->get();
 
-        return view('shop.orders', ['orders' => $orders]);
+        return view('shop.orders', compact('orders'));
     }
 
     public function order()
     {
         $order = Order::with('products')->findOrFail(\request('id'));
 
-        return view('shop.order', ['order' => $order]);
+        return view('shop.order', compact('order'));
     }
 }

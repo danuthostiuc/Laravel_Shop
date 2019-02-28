@@ -27,7 +27,7 @@ class ShopController extends Controller
             ->whereNotIn($model->getKeyName(), \request()->session()->get('cart', []))
             ->get();
 
-        return view('shop.index', ['products' => $products]);
+        return view('shop.index', compact('products'));
     }
 
     public function cart()
@@ -45,7 +45,7 @@ class ShopController extends Controller
             ->whereIn($model->getKeyName(), \request()->session()->get('cart', []))
             ->get();
 
-        return view('shop.cart', ['products' => $products]);
+        return view('shop.cart', compact('products'));
     }
 
     public function login()

@@ -74,7 +74,7 @@ class ProductController extends Controller
         $product = $model->newQuery()
             ->findOrFail(\request('id'));
 
-        return view('shop.product', ['product' => $product]);
+        return view('shop.product', compact('product'));
     }
 
     public function delete()
