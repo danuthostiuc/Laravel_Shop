@@ -37,8 +37,8 @@ Route::middleware(['admin'])->group(function () {
 
     Route::post('/products', 'ProductController@add');
 
-    Route::post('/products/{id}', 'ProductController@add');
+    Route::post('/products/{id}', 'ProductController@save');
 
-    Route::get('/product/{id}', 'ProductController@edit');
+    Route::get('/product/{id}', 'ProductController@form');
 
 });

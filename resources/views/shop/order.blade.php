@@ -6,7 +6,7 @@
 <h1>
     {{ trans("Order") }}
 </h1>
-<table>
+<table border="1">
     <tr>
         <td rowspan="{{ count($order->products) + 1 }}" class="cp_img">
             {{ $order->name }}
