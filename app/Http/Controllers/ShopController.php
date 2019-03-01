@@ -27,6 +27,10 @@ class ShopController extends Controller
             ->whereNotIn($model->getKeyName(), \request()->session()->get('cart', []))
             ->get();
 
+        if (\request()->ajax()) {
+            return $products;
+        }
+
         return view('shop.index', compact('products'));
     }
 
@@ -44,6 +48,10 @@ class ShopController extends Controller
         $products = $model->newQuery()
             ->whereIn($model->getKeyName(), \request()->session()->get('cart', []))
             ->get();
+
+        if (\request()->ajax()) {
+            return $products;
+        }
 
         return view('shop.cart', compact('products'));
     }

@@ -42,3 +42,7 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/product/{id}', 'ProductController@form');
 
 });
+
+Route::get('/spa', function () {
+    return view('shop.spa');
+});
