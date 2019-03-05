@@ -62,6 +62,9 @@ class ProductController extends Controller
 
     public function products()
     {
+        if (\request()->ajax()) {
+            return Product::all();
+        }
         return view('shop.products', ['products' => Product::all()]);
     }
 }

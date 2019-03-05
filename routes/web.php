@@ -17,7 +17,7 @@ Route::get('/login', function () {
     return view('shop.login');
 });
 
-Route::post('/orders', 'ShopController@login');
+Route::post('/login', 'ShopController@login');
 Route::get('/logout', 'ShopController@logout');
 Route::post('checkout/', 'ShopController@checkout');
 
