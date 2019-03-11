@@ -225,9 +225,6 @@
                     }
                   });
                 },
-                error: function () {
-                  console.log('error');
-                }
               });
               break;
             /**
@@ -249,9 +246,6 @@
                     }
                   });
                 },
-                error: function () {
-                  console.log('error');
-                }
               });
               break;
             case '#login':
@@ -266,6 +260,10 @@
                 dataType: 'json',
                 success: function (response) {
                   $('.products .list').html(renderAllProducts(response));
+                },
+                error: function () {
+                  window.location.hash = '#login';
+                  window.onhashchange();
                 }
               });
               break;
@@ -273,8 +271,22 @@
              * case for adding a new product (admin)
              */
             case '#product':
-              document.getElementById("image").required = true;
-              $('.product').show();
+              $.ajax({
+                type: 'get',
+                url: '/orders',   //the request is sent at this url just to check if admin is set in session
+                dataType: 'json',
+                success: function () {
+                  $('input[name=title]').val('');
+                  $('input[name=description]').val('');
+                  $('input[name=price]').val('');
+                  document.getElementById("image").required = true;
+                  $('.product').show();
+                },
+                error: function () {
+                  window.location.hash = '#login';
+                  window.onhashchange();
+                }
+              });
               break;
             /**
              * case for editing an existing product (admin)
@@ -292,7 +304,8 @@
                   $('.product').show();
                 },
                 error: function () {
-                  console.log("Error.");
+                  window.location.hash = '#login';
+                  window.onhashchange();
                 }
               });
               break;
@@ -307,14 +320,11 @@
                 success: function (response) {
                   $('.products').show();
                   $('.products .list').html(renderAllProducts(response));
-                },
-                error: function () {
-                  console.log("Error rendering form for editing product!");
                 }
               });
               break;
             /**
-             * case for displaying all orders
+             * case for displaying all orders (admin)
              */
             case '#orders':
               $.ajax({
@@ -326,12 +336,13 @@
                   $('.orders .list').html(renderAllOrders(response));
                 },
                 error: function () {
-                  console.log("Error rendering orders!");
+                  window.location.hash = '#login';
+                  window.onhashchange();
                 }
               });
               break;
             /**
-             * case of displaying a single order
+             * case of displaying a single order (admin)
              */
             case (window.location.hash.match(/#order\/\d+/) || {}).input:
               $.ajax({
@@ -343,7 +354,8 @@
                   $('.order .list').html(renderSingleOrder(response));
                 },
                 error: function () {
-                  console.log("Error rendering order!");
+                  window.location.hash = '#login';
+                  window.onhashchange();
                 }
               });
               break;
@@ -376,8 +388,14 @@
             data: new FormData(this),
             processData: false,
             contentType: false,
-            success: function (data) {
-              $('.cart .list').append(data.view);
+            success: function () {
+              $.ajax('/', {
+                dataType: 'json',
+                success: function (response) {
+                  $('.index .list').html(renderList(response));
+                }
+              });
+              window.location.hash = '#';
             },
             error: function () {
               if (data.status === 422) {
@@ -397,12 +415,10 @@
               }
             }
           });
-          window.location.hash = '#';
-          window.onhashchange();
         });
 
         /**
-         *  Log In
+         *  Log in
          */
         $('#formAdmin').submit(function (event) {
           event.preventDefault();
@@ -413,14 +429,41 @@
             processData: false,
             contentType: false,
             success: function () {
-              console.log("Login successful!");
+              window.location.hash = '#products';
+              window.onhashchange();
             },
-            error: function () {
-              console.log("Login error!");
+            error: function (data) {
+              if (data.status === 422) {
+                var errors = $.parseJSON(data.responseText);
+                $.each(errors, function (key, value) {
+                  $('.login').addClass("alert alert-danger");
+                  if ($.isPlainObject(value)) {
+                    $.each(value, function (key, value) {
+                      console.log(key + " " + value);
+                      $('.login').show().append(value + "<br/>");
+
+                    });
+                  } else {
+                    $('.login').show().append(value + "<br/>");
+                  }
+                });
+              }
             }
           });
-          window.location.hash = '#products';
-          window.onhashchange();
+        });
+
+        /**
+         * Log out
+         */
+        $('#logout' ).on("click", function (event) {
+          $.ajax('/logout', {
+            dataType: 'json',
+            error: function () {
+              window.location.hash = '#';
+              window.onhashchange();
+            }
+          });
+          event.preventDefault();
         });
 
         /**
@@ -434,8 +477,9 @@
             data: new FormData(this),
             processData: false,
             contentType: false,
-            success: function (data) {
-              $('.product .form').append(data.view);
+            success: function () {
+              window.location.hash = '#products';
+              window.onhashchange();
             },
             error: function (data) {
               if (data.status === 422) {
@@ -445,25 +489,13 @@
                   if ($.isPlainObject(value)) {
                     $.each(value, function (key, value) {
                       console.log(key + " " + value);
-                      $('.product .form').show().append(value + "<br/>");
+                      $('.product .form').show().append(value + "<br/> ");
                     });
                   } else {
                     $('.product .form').show().append(value + "<br/>");
                   }
                 });
               }
-            }
-          });
-          window.location.hash = '#products';
-          window.onhashchange();
-        });
-
-        $('#logout').click(function () {
-          $.ajax('/logout', {
-            dataType: 'json',
-            success: function () {
-              window.location.hash = '#';
-              window.onhashchange();
             }
           });
         });

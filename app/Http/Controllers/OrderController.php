@@ -16,7 +16,7 @@ class OrderController extends Controller
             ->groupBy('orders.id')
             ->get();
 
-        if(\request()->ajax()) {
+        if(\request()->ajax() && \request()->session()->exists('admin')) {
             return $orders;
         }
 
@@ -27,7 +27,7 @@ class OrderController extends Controller
     {
         $order = Order::with('products')->findOrFail(\request('id'));
 
-        if(\request()->ajax()) {
+        if(\request()->ajax() && \request()->session()->exists('admin')) {
             return $order;
         }
 

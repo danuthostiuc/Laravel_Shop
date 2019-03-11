@@ -48,7 +48,7 @@ class ProductController extends Controller
     {
         $product = !\request('id') ? new Product : Product::query()->findOrFail(\request('id'));
 
-        if (\request()->ajax()) {
+        if (\request()->ajax() && \request()->session()->exists('admin')) {
             return $product;
         }
 
@@ -72,7 +72,7 @@ class ProductController extends Controller
 
     public function products()
     {
-        if (\request()->ajax()) {
+        if (\request()->ajax() && \request()->session()->exists('admin')) {
             return Product::all();
         }
         return view('shop.products', ['products' => Product::all()]);
