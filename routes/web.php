@@ -19,7 +19,7 @@ Route::get('/login', function () {
 
 Route::post('/login', 'ShopController@login');
 Route::get('/logout', 'ShopController@logout');
-Route::post('checkout/', 'ShopController@checkout');
+Route::post('/checkout', 'ShopController@checkout');
 
 Route::middleware(['admin'])->group(function () {
 
@@ -35,11 +35,11 @@ Route::middleware(['admin'])->group(function () {
 
     Route::get('/order/{id}', 'OrderController@order');
 
-    Route::post('/products', 'ProductController@add');
+    Route::post('/products', 'ProductController@save');
 
     Route::post('/products/{id}', 'ProductController@save');
 
-    Route::get('/product/{id}', 'ProductController@form');
+    Route::get('/product/{id?}', 'ProductController@form');
 
 });
 

@@ -21,8 +21,14 @@ class ProductController extends Controller
         $product = !\request('id') ? new Product : Product::query()->findOrFail(\request('id'));
 
         if (\request()->exists('image')) {
+            $image_path = public_path('/storage/') . $product->image;
+
+            if (\File::exists($image_path)) {
+                \File::delete($image_path);
+            }
+
             $file = Input::file('image');
-            $destinationPath = public_path() . '/storage/';
+            $destinationPath = public_path('/storage/');
             $filename = uniqid() . '.' . $file->getClientOriginalExtension();
             $file->move($destinationPath, $filename);
 
@@ -42,6 +48,10 @@ class ProductController extends Controller
     {
         $product = !\request('id') ? new Product : Product::query()->findOrFail(\request('id'));
 
+        if (\request()->ajax()) {
+            return $product;
+        }
+
         return view('shop.product', compact('product'));
     }
 
@@ -49,7 +59,7 @@ class ProductController extends Controller
     {
         $product = Product::query()->findOrFail(\request('id'));
 
-        $image_path = public_path() . '/storage/' . $product->image;
+        $image_path = public_path('/storage/') . $product->image;
 
         if (\File::exists($image_path)) {
             \File::delete($image_path);

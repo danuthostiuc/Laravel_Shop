@@ -7,11 +7,11 @@
     {{ trans("Product") }}
 </h1>
 
-<form method="post" enctype="multipart/form-data" action="/products/{{ \request('id') }}">
+<form method="post" enctype="multipart/form-data" action="/products{{ \request('id') ? '/' . \request('id') : '' }}">
     @csrf
     @include('shop.errors')
     <input type="text" name="title"
-           value="{{ old('title', $product->title }}"
+           value="{{ (\request('id')) ? old('title', $product->title) : old('title') }}"
            placeholder="{{ trans("Title") }}" required>
     <br>
     <input type="text" name="description"
@@ -26,7 +26,7 @@
             type="file"
             name="image"
             accept=".png, .gif, .jpeg, .jpg"
-            {{ !$product->getKey() ? 'required' : '' }}>
+            {{ (!\request('id')) ? 'required' : '' }}>
     <br>
     <a href="/products">{{ trans("Products") }}</a>
     <input type="submit" name="save" value="{{ trans("Save") }}">

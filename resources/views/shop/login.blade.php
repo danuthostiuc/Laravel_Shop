@@ -6,7 +6,7 @@
 <h1>
     {{ trans("Log In") }}
 </h1>
-<form method="post" action="/orders">
+<form method="post" action="/login">
     @csrf
     @include('shop.errors')
     <input type="text" name="username" value="{{ old('username') }}" placeholder="{{ trans("Username") }}" required>

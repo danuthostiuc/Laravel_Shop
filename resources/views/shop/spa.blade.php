@@ -11,6 +11,14 @@
 
     <!-- Custom JS script -->
     <script type="text/javascript">
+      $.ajaxSetup({
+        beforeSend: function(xhr, type) {
+          if (!type.crossDomain) {
+            xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
+          }
+        },
+      });
+
       $(document).ready(function () {
 
         /**
@@ -30,6 +38,7 @@
 
         function renderList(products) {
           html = [
+            '<table>',
             '<tr>',
             '<th>{{ __('Image') }}</th>',
             '<th>{{ __('Details') }}</th>',
@@ -42,24 +51,25 @@
               '<tr>',
               '<td class="cp_img">' + '<img src=storage/' + product.image + '></td>',
               '<td class="cp_img">' +
-                '<ul>' +
-                    '<li>' + product.title + '</li>' +
-                    '<li>' + product.description + '</li>' +
-                    '<li>' + product.price + '</li>' +
-                '</ul>' +
+              '<ul>' +
+              '<li>' + product.title + '</li>' +
+              '<li>' + product.description + '</li>' +
+              '<li>' + product.price + '</li>' +
+              '</ul>' +
               '</td>',
 
               '<td class="cp_img"><a href="' +
-              (window.location.hash.match(/#cart(\/id=\d+)*/) ? '#cart/id=' : '#id=') +
+              (window.location.hash.match(/#cart(\/\d+)*/) ? '#cart/' : '#') +
               product.id +
               '">' +
-              (window.location.hash.match(/#cart(\/id=\d+)*/) ? '{{ __("Remove") }}' : '{{ __("Add") }}') +
+              (window.location.hash.match(/#cart(\/\d+)*/) ? '{{ __("Remove") }}' : '{{ __("Add") }}') +
               '</a></td>',
 
               '</tr>'
             ].join('');
-
           });
+          html += ['</table>'];
+
           return html;
         }
 
@@ -77,20 +87,20 @@
               '<tr>',
               '<td class="cp_img">' + '<img src=storage/' + product.image + '></td>',
               '<td class="cp_img">' +
-                '<ul>' +
-                    '<li>' + product.title + '</li>' +
-                    '<li>' + product.description + '</li>' +
-                    '<li>' + product.price + '</li>' +
-                '</ul>' +
+              '<ul>' +
+              '<li>' + product.title + '</li>' +
+              '<li>' + product.description + '</li>' +
+              '<li>' + product.price + '</li>' +
+              '</ul>' +
               '</td>',
 
-              '<td class="cp_img"><a href="#product/id=' +
+              '<td class="cp_img"><a href="#product/' +
               product.id +
               '">' +
               '{{ __("Edit") }}' +
               '</a></td>',
 
-              '<td class="cp_img"><a href="#products/id=' +
+              '<td class="cp_img"><a href="#products/' +
               product.id +
               '">' +
               '{{ __("Delete") }}' +
@@ -98,7 +108,80 @@
 
               '</tr>'
             ].join('');
+          });
+          return html;
+        }
 
+        function renderAllOrders(orders) {
+          html = [];
+          $.each(orders, function (key, order) {
+            html += [
+              '<tr>',
+              '<td>',
+              '<a href="#order/' +
+              order.id +
+              '">' +
+              order.id +
+              '</a>',
+              '</td>',
+              '<td>' +
+              order.name +
+              '</td>',
+              '<td>' +
+              order.email +
+              '</td>',
+              '<td>' +
+              order.comment +
+              '</td>',
+              '<td>' +
+              order.total +
+              '</td>',
+              '</tr>'
+            ].join('');
+          });
+          return html;
+        }
+
+        function renderSingleOrder(order) {
+          html = [
+            '<tr>',
+            '<td rowspan="' +
+            order.products.length + 1 +
+            '" class="cp_img">' +
+            order.name +
+            '</td>',
+            '<td rowspan="' +
+            order.products.length + 1 +
+            '" class="cp_img">' +
+            order.email +
+            '</td>',
+            '<td rowspan="' +
+            order.products.length + 1 +
+            '" class="cp_img">' +
+            order.comment +
+            '</td>',
+            '</tr>'
+          ].join('');
+
+          $.each(order.products, function (key, order) {
+            html += [
+              '<tr>',
+              '<td class="cp_img">',
+              '<img src="storage/' +
+              order.image +
+              '"/>',
+              '</td>',
+              '<td class="cp_img">' +
+              order.title +
+              '</td>',
+              '<td class="cp_img">' +
+              order.description +
+              '</td>',
+              '<td class="cp_img">' +
+              order.price +
+              '</td>',
+              '</tr>'
+            ].join('');
           });
           return html;
         }
@@ -112,7 +195,6 @@
           switch (window.location.hash) {
             //case '#cart':
             case '#cart':
-              //alert('simple cart');
               // Show the cart page
               $('.cart').show();
               // Load the cart products from the server
@@ -124,15 +206,16 @@
                 }
               });
               break;
-            case (window.location.hash.match(/#cart\/id=\d+/) || {}).input:
-              //alert('cart with ids');
+            /**
+             * case for removing products from cart
+             */
+            case (window.location.hash.match(/#cart\/\d+/) || {}).input:
               $.ajax({
                 type: 'get',
                 url: '/cart',
-                data: {'id': window.location.hash.split('=')[1]},
+                data: {'id': window.location.hash.split('/')[1]},
                 dataType: 'json',
                 success: function () {
-                  console.log('success');
                   $('.cart').show();
                   $.ajax('/cart', {
                     dataType: 'json',
@@ -147,15 +230,16 @@
                 }
               });
               break;
-            case (window.location.hash.match(/#id=\d+/) || {}).input:
-              //alert('index with ids');
+            /**
+             * case for adding products to cart
+             */
+            case (window.location.hash.match(/#\d+/) || {}).input:
               $.ajax({
                 type: 'get',
                 url: '/',
-                data: {'id': window.location.hash.split('=')[1]},
+                data: {'id': window.location.hash.split('#')[1]},
                 dataType: 'json',
                 success: function () {
-                  console.log('success');
                   $('.index').show();
                   $.ajax('/', {
                     dataType: 'json',
@@ -172,31 +256,10 @@
               break;
             case '#login':
               $('.login').show();
-
-              $.ajaxSetup({
-                headers: {
-                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-              });
-
-              $("btn-submit").click(function () {
-
-                var username = $("input[name=username]").val();
-                var password = $("input[name=password]").val();
-
-                $.ajax({
-                  type: 'post',
-                  url: '/login',
-                  data: {username: username, password: password},
-                  success: function (data) {
-                    alert(data.success());
-                  },
-                  error: function () {
-                    alert("Login error");
-                  }
-                });
-              });
               break;
+            /**
+             * case for showing all products (admin restricted zone)
+             */
             case '#products':
               $('.products').show();
               $.ajax('/products', {
@@ -206,12 +269,85 @@
                 }
               });
               break;
+            /**
+             * case for adding a new product (admin)
+             */
             case '#product':
+              document.getElementById("image").required = true;
               $('.product').show();
-
+              break;
+            /**
+             * case for editing an existing product (admin)
+             */
+            case (window.location.hash.match(/#product\/\d+/) || {}).input:
+              $.ajax({
+                type: 'get',
+                url: '/product/' + window.location.hash.split('/')[1],
+                dataType: 'json',
+                success: function (product) {
+                  $('input[name=title]').val(product.title);
+                  $('input[name=description]').val(product.description);
+                  $('input[name=price]').val(product.price);
+                  document.getElementById("image").required = false;
+                  $('.product').show();
+                },
+                error: function () {
+                  console.log("Error.");
+                }
+              });
+              break;
+            /**
+             * case for deleting a product (admin)
+             */
+            case (window.location.hash.match(/#products\/\d+/) || {}).input:
+              $.ajax({
+                type: 'get',
+                url: '/products/' + window.location.hash.split('/')[1],
+                dataType: 'json',
+                success: function (response) {
+                  $('.products').show();
+                  $('.products .list').html(renderAllProducts(response));
+                },
+                error: function () {
+                  console.log("Error rendering form for editing product!");
+                }
+              });
+              break;
+            /**
+             * case for displaying all orders
+             */
+            case '#orders':
+              $.ajax({
+                type: 'get',
+                url: '/orders',
+                dataType: 'json',
+                success: function (response) {
+                  $('.orders').show();
+                  $('.orders .list').html(renderAllOrders(response));
+                },
+                error: function () {
+                  console.log("Error rendering orders!");
+                }
+              });
+              break;
+            /**
+             * case of displaying a single order
+             */
+            case (window.location.hash.match(/#order\/\d+/) || {}).input:
+              $.ajax({
+                type: 'get',
+                url: '/order/' + window.location.hash.split('/')[1],
+                dataType: 'json',
+                success: function (response) {
+                  $('.order').show();
+                  $('.order .list').html(renderSingleOrder(response));
+                },
+                error: function () {
+                  console.log("Error rendering order!");
+                }
+              });
               break;
             default:
-              //alert('simple index');
               // If all else fails, always default to index
               // Show the index page
               $('.index').show();
@@ -226,7 +362,112 @@
               break;
           }
         };
+
         window.onhashchange();
+
+        /**
+         *  Checkout
+         */
+        $('#formCart').submit(function (event) {
+          event.preventDefault();
+          $.ajax({
+            type: 'post',
+            url: "checkout",
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            success: function (data) {
+              $('.cart .list').append(data.view);
+            },
+            error: function () {
+              if (data.status === 422) {
+                var errors = $.parseJSON(data.responseText);
+                $.each(errors, function (key, value) {
+                  $('.cart .list').addClass("alert alert-danger");
+                  if ($.isPlainObject(value)) {
+                    $.each(value, function (key, value) {
+                      console.log(key + " " + value);
+                      $('.cart .list').show().append(value + "<br/>");
+
+                    });
+                  } else {
+                    $('.cart .list').show().append(value + "<br/>");
+                  }
+                });
+              }
+            }
+          });
+          window.location.hash = '#';
+          window.onhashchange();
+        });
+
+        /**
+         *  Log In
+         */
+        $('#formAdmin').submit(function (event) {
+          event.preventDefault();
+          $.ajax({
+            type: 'post',
+            url: 'login',
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            success: function () {
+              console.log("Login successful!");
+            },
+            error: function () {
+              console.log("Login error!");
+            }
+          });
+          window.location.hash = '#products';
+          window.onhashchange();
+        });
+
+        /**
+         *  Adding/Editing a product
+         */
+        $('#form').submit(function (event) {
+          event.preventDefault();
+          $.ajax({
+            type: 'post',
+            url: 'products' + (window.location.hash.split('/')[1] ? '/' + window.location.hash.split('/')[1] : ''),
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            success: function (data) {
+              $('.product .form').append(data.view);
+            },
+            error: function (data) {
+              if (data.status === 422) {
+                var errors = $.parseJSON(data.responseText);
+                $.each(errors, function (key, value) {
+                  $('.product .form').addClass("alert alert-danger");
+                  if ($.isPlainObject(value)) {
+                    $.each(value, function (key, value) {
+                      console.log(key + " " + value);
+                      $('.product .form').show().append(value + "<br/>");
+                    });
+                  } else {
+                    $('.product .form').show().append(value + "<br/>");
+                  }
+                });
+              }
+            }
+          });
+          window.location.hash = '#products';
+          window.onhashchange();
+        });
+
+        $('#logout').click(function () {
+          $.ajax('/logout', {
+            dataType: 'json',
+            success: function () {
+              window.location.hash = '#';
+              window.onhashchange();
+            }
+          });
+        });
+
       });
     </script>
 
@@ -250,70 +491,129 @@
         {{ __("Cart") }}
     </h1>
     <!-- The cart element where the products list is rendered -->
-    <table class="list"></table>
+    <div class="list"></div>
+
+    <form id="formCart" method="post">
+        @csrf
+        <input type="text"
+               name="name"
+               value="{{ old("name") }}"
+               placeholder="{{ __("Name") }}"
+               required>
+        <br>
+        <input type="text"
+               name="email"
+               value="{{ old("email") }}"
+               placeholder="{{ __("Contact details") }}"
+               required>
+        <br>
+        <input type="text"
+               name="comment"
+               value="{{ old("comment") }}"
+               placeholder="{{ __("Comments") }}">
+        <br>
+        <input type="submit"
+               name="checkout"
+               value="{{ __("Checkout") }}">
+    </form>
 
     <!-- A link to go to the index by changing the hash -->
     <a href="#" class="button">Go to index</a>
 </div>
 
+{{--The products page--}}
 <div class="page products">
     <h1>
         {{ __("Products") }}
     </h1>
+    <iframe width="0" height="0" name="frame" id="frame"></iframe>
     <table class="list"></table>
 
     <a href="#product" class="button">Add</a>
 
-    <a href="#login" class="button">Logout</a>
+    <a id="logout" href="#logout" class="button">Logout</a>
 </div>
 
+{{--The login page--}}
 <div class="page login">
     <h1>
         {{ __("Log In") }}
     </h1>
-    <form method="post" action="#products">
+    <form id="formAdmin" method="post">
         @csrf
-        @include('shop.errors')
-        <input type="text" name="username" value="{{ old('username') }}" placeholder="{{ __("Username") }}" required>
-        <br>
-        <input type="password" name="password" value="{{ old('password') }}" placeholder="{{ __("Password") }}"
+        <input type="text"
+               name="username"
+               value="{{ old('username') }}"
+               placeholder="{{ __("Username") }}"
                required>
         <br>
-        <input class="btn-submit" type="submit" name="submit" value="{{ __("Login") }}">
+        <input type="password"
+               name="password"
+               value="{{ old('password') }}"
+               placeholder="{{ __("Password") }}"
+               required>
+        <br>
+        <input type="submit"
+               name="login"
+               value="{{ __("Login") }}">
     </form>
 </div>
 
+{{--The form for adding/editing products--}}
 <div class="page product">
     <h1>
         {{ __("Product") }}
     </h1>
-    <form method="post" enctype="multipart/form-data" action="/products/{{ \request('id') }}">
+    <form id="form" class="form" method="post" enctype="multipart/form-data" target="frame">
         @csrf
-        @include('shop.errors')
         <input type="text"
                name="title"
                value="{{ old('title') }}"
-               placeholder="{{ __("Title") }}" required>
+               placeholder="{{ __("Title") }}"
+               required>
         <br>
         <input type="text"
                name="description"
                value="{{ old('description') }}"
-               placeholder="{{ __("Description") }}" required>
-        <br>
-        <input type="number"
-               name="price"
-               value="{{ old('price') }}"
-               placeholder="{{ __("Price") }}" required>
+               placeholder="{{ __("Description") }}"
+               required>
         <br>
         <input
-                type="file"
-                name="image"
-                accept=".png, .gif, .jpeg, .jpg"
-                required>
+               type="number"
+               name="price"
+               value="{{ old('price') }}"
+               placeholder="{{ __("Price") }}"
+               required>
         <br>
-        <a href="/products">{{ __("Products") }}</a>
-        <input type="submit" name="save" value="{{ __("Save") }}">
+        <input
+               type="file"
+               id="image"
+               name="image"
+               accept=".png, .gif, .jpeg, .jpg">
+        <br>
+        <a href="#products">{{ __("Products") }}</a>
+        <input
+               type="submit"
+               id="submit"
+               name="save"
+               value="{{ __("Save") }}">
     </form>
+</div>
+
+{{--The orders page--}}
+<div class="page orders">
+    <h1>
+        {{ __("Orders") }}
+    </h1>
+    <table border="1" class="list"></table>
+</div>
+
+{{--The order page--}}
+<div class="page order">
+    <h1>
+        {{ __("Order") }}
+    </h1>
+    <table border="1" class="list"></table>
 </div>
 
 </body>
