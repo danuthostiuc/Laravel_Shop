@@ -293,6 +293,7 @@
                   $('input[name=title]').val('');
                   $('input[name=description]').val('');
                   $('input[name=price]').val('');
+                  $('input[name=image]').val('');
                   document.getElementById("image").required = true;
                   $('.product').show();
                 },
