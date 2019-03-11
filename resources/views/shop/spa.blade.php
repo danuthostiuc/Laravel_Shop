@@ -12,7 +12,7 @@
     <!-- Custom JS script -->
     <script type="text/javascript">
       $.ajaxSetup({
-        beforeSend: function(xhr, type) {
+        beforeSend: function (xhr, type) {
           if (!type.crossDomain) {
             xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
           }
@@ -39,33 +39,33 @@
         function renderList(products) {
           html = [
             '<table>',
-            '<tr>',
-            '<th>{{ __('Image') }}</th>',
-            '<th>{{ __('Details') }}</th>',
-            (window.location.hash.match(/#cart/) ? '<th>{{ __("Remove") }}</th>' : '<th>{{ __("Add") }}</th>'),
-            '</tr>'
+                '<tr>',
+                    '<th>{{ __('Image') }}</th>',
+                    '<th>{{ __('Details') }}</th>',
+                    (window.location.hash.match(/#cart/) ? '<th>{{ __("Remove") }}</th>' : '<th>{{ __("Add") }}</th>'),
+                '</tr>'
           ].join('');
 
           $.each(products, function (key, product) {
             html += [
               '<tr>',
-              '<td class="cp_img">' + '<img src=storage/' + product.image + '></td>',
-              '<td class="cp_img">' +
-              '<ul>' +
-              '<li>' + product.title + '</li>' +
-              '<li>' + product.description + '</li>' +
-              '<li>' + product.price + '</li>' +
-              '</ul>' +
-              '</td>',
+                '<td class="cp_img">' + '<img src=storage/' + product.image + '></td>',
+                '<td class="cp_img">' +
+                    '<ul>' +
+                        '<li>' + product.title + '</li>' +
+                        '<li>' + product.description + '</li>' +
+                        '<li>' + product.price + '</li>' +
+                    '</ul>' +
+                '</td>',
 
-              '<td class="cp_img"><a href="' +
-              (window.location.hash.match(/#cart(\/\d+)*/) ? '#cart/' : '#') +
-              product.id +
-              '">' +
-              (window.location.hash.match(/#cart(\/\d+)*/) ? '{{ __("Remove") }}' : '{{ __("Add") }}') +
-              '</a></td>',
+                '<td class="cp_img"><a href="' +
+                (window.location.hash.match(/#cart(\/\d+)*/) ? '#cart/' : '#') +
+                product.id +
+                '">' +
+                (window.location.hash.match(/#cart(\/\d+)*/) ? '{{ __("Remove") }}' : '{{ __("Add") }}') +
+                '</a></td>',
 
-              '</tr>'
+                '</tr>'
             ].join('');
           });
           html += ['</table>'];
@@ -76,35 +76,35 @@
         function renderAllProducts(products) {
           html = [
             '<tr>',
-            '<th>{{ __('Image') }}</th>',
-            '<th>{{ __('Details') }}</th>',
-            '<th>{{ __('Action') }}',
+                '<th>{{ __('Image') }}</th>',
+                '<th>{{ __('Details') }}</th>',
+                '<th>{{ __('Action') }}',
             '</tr>'
           ].join('');
 
           $.each(products, function (key, product) {
             html += [
               '<tr>',
-              '<td class="cp_img">' + '<img src=storage/' + product.image + '></td>',
-              '<td class="cp_img">' +
-              '<ul>' +
-              '<li>' + product.title + '</li>' +
-              '<li>' + product.description + '</li>' +
-              '<li>' + product.price + '</li>' +
-              '</ul>' +
-              '</td>',
+                '<td class="cp_img">' + '<img src=storage/' + product.image + '></td>',
+                '<td class="cp_img">' +
+                    '<ul>' +
+                        '<li>' + product.title + '</li>' +
+                        '<li>' + product.description + '</li>' +
+                        '<li>' + product.price + '</li>' +
+                    '</ul>' +
+                '</td>',
 
-              '<td class="cp_img"><a href="#product/' +
-              product.id +
-              '">' +
-              '{{ __("Edit") }}' +
-              '</a></td>',
+                '<td class="cp_img"><a href="#product/' +
+                product.id +
+                '">' +
+                '{{ __("Edit") }}' +
+                '</a></td>',
 
-              '<td class="cp_img"><a href="#products/' +
-              product.id +
-              '">' +
-              '{{ __("Delete") }}' +
-              '</a></td>',
+                '<td class="cp_img"><a href="#products/' +
+                product.id +
+                '">' +
+                '{{ __("Delete") }}' +
+                '</a></td>',
 
               '</tr>'
             ].join('');
@@ -117,25 +117,25 @@
           $.each(orders, function (key, order) {
             html += [
               '<tr>',
-              '<td>',
-              '<a href="#order/' +
-              order.id +
-              '">' +
-              order.id +
-              '</a>',
-              '</td>',
-              '<td>' +
-              order.name +
-              '</td>',
-              '<td>' +
-              order.email +
-              '</td>',
-              '<td>' +
-              order.comment +
-              '</td>',
-              '<td>' +
-              order.total +
-              '</td>',
+                '<td>',
+                    '<a href="#order/' +
+                    order.id +
+                    '">' +
+                    order.id +
+                    '</a>',
+                '</td>',
+                '<td>' +
+                    order.name +
+                '</td>',
+                '<td>' +
+                    order.email +
+                '</td>',
+                '<td>' +
+                    order.comment +
+                '</td>',
+                '<td>' +
+                    order.total +
+                '</td>',
               '</tr>'
             ].join('');
           });
@@ -145,41 +145,41 @@
         function renderSingleOrder(order) {
           html = [
             '<tr>',
-            '<td rowspan="' +
-            order.products.length + 1 +
-            '" class="cp_img">' +
-            order.name +
-            '</td>',
-            '<td rowspan="' +
-            order.products.length + 1 +
-            '" class="cp_img">' +
-            order.email +
-            '</td>',
-            '<td rowspan="' +
-            order.products.length + 1 +
-            '" class="cp_img">' +
-            order.comment +
-            '</td>',
+                '<td rowspan="' +
+                    order.products.length + 1 +
+                    '" class="cp_img">' +
+                    order.name +
+                '</td>',
+                '<td rowspan="' +
+                    order.products.length + 1 +
+                    '" class="cp_img">' +
+                    order.email +
+                '</td>',
+                '<td rowspan="' +
+                    order.products.length + 1 +
+                    '" class="cp_img">' +
+                    order.comment +
+                '</td>',
             '</tr>'
           ].join('');
 
           $.each(order.products, function (key, order) {
             html += [
               '<tr>',
-              '<td class="cp_img">',
-              '<img src="storage/' +
-              order.image +
-              '"/>',
-              '</td>',
-              '<td class="cp_img">' +
-              order.title +
-              '</td>',
-              '<td class="cp_img">' +
-              order.description +
-              '</td>',
-              '<td class="cp_img">' +
-              order.price +
-              '</td>',
+                '<td class="cp_img">',
+                    '<img src="storage/' +
+                    order.image +
+                    '"/>',
+                '</td>',
+                '<td class="cp_img">' +
+                    order.title +
+                '</td>',
+                '<td class="cp_img">' +
+                    order.description +
+                '</td>',
+                '<td class="cp_img">' +
+                    order.price +
+                '</td>',
               '</tr>'
             ].join('');
           });
@@ -248,8 +248,22 @@
                 },
               });
               break;
+            /**
+             * case for log in
+             */
             case '#login':
-              $('.login').show();
+              $.ajax({
+                type: 'get',
+                url: '/orders',   //the request is sent at this url just to check if admin is set in laravel session
+                dataType: 'json',
+                success: function () {
+                  window.location.hash = '#products';
+                  window.onhashchange();
+                },
+                error: function () {
+                  $('.login').show();
+                }
+              });
               break;
             /**
              * case for showing all products (admin restricted zone)
@@ -273,7 +287,7 @@
             case '#product':
               $.ajax({
                 type: 'get',
-                url: '/orders',   //the request is sent at this url just to check if admin is set in session
+                url: '/orders',   //the request is sent at this url just to check if admin is set in laravel session
                 dataType: 'json',
                 success: function () {
                   $('input[name=title]').val('');
@@ -397,7 +411,7 @@
               });
               window.location.hash = '#';
             },
-            error: function () {
+            error: function (data) {
               if (data.status === 422) {
                 var errors = $.parseJSON(data.responseText);
                 $.each(errors, function (key, value) {
@@ -406,7 +420,6 @@
                     $.each(value, function (key, value) {
                       console.log(key + " " + value);
                       $('.cart .list').show().append(value + "<br/>");
-
                     });
                   } else {
                     $('.cart .list').show().append(value + "<br/>");
@@ -455,15 +468,15 @@
         /**
          * Log out
          */
-        $('#logout' ).on("click", function (event) {
+        $('#logout').on("click", function (event) {
+          event.preventDefault();
           $.ajax('/logout', {
             dataType: 'json',
-            error: function () {
+            always: function () {
               window.location.hash = '#';
               window.onhashchange();
             }
           });
-          event.preventDefault();
         });
 
         /**
@@ -558,7 +571,6 @@
     <h1>
         {{ __("Products") }}
     </h1>
-    <iframe width="0" height="0" name="frame" id="frame"></iframe>
     <table class="list"></table>
 
     <a href="#product" class="button">Add</a>
@@ -611,24 +623,24 @@
                required>
         <br>
         <input
-               type="number"
-               name="price"
-               value="{{ old('price') }}"
-               placeholder="{{ __("Price") }}"
-               required>
+                type="number"
+                name="price"
+                value="{{ old('price') }}"
+                placeholder="{{ __("Price") }}"
+                required>
         <br>
         <input
-               type="file"
-               id="image"
-               name="image"
-               accept=".png, .gif, .jpeg, .jpg">
+                type="file"
+                id="image"
+                name="image"
+                accept=".png, .gif, .jpeg, .jpg">
         <br>
         <a href="#products">{{ __("Products") }}</a>
         <input
-               type="submit"
-               id="submit"
-               name="save"
-               value="{{ __("Save") }}">
+                type="submit"
+                id="submit"
+                name="save"
+                value="{{ __("Save") }}">
     </form>
 </div>
 
