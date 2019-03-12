@@ -473,11 +473,9 @@
           event.preventDefault();
           $.ajax('/logout', {
             dataType: 'json',
-            always: function () {
-              window.location.hash = '#';
-              window.onhashchange();
-            }
           });
+          window.location.hash = '#';
+          window.onhashchange();
         });
 
         /**
