@@ -7,16 +7,15 @@
     <!-- Load the jQuery JS library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-    <meta name="csrf-token" content="{{ csrf_token() }}"/>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Custom JS script -->
     <script type="text/javascript">
+
       $.ajaxSetup({
-        beforeSend: function (xhr, type) {
-          if (!type.crossDomain) {
-            xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
-          }
-        },
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
       });
 
       $(document).ready(function () {
@@ -198,7 +197,9 @@
               // Show the cart page
               $('.cart').show();
               // Load the cart products from the server
-              $.ajax('/cart', {
+              $.ajax({
+                type: 'get',
+                url: '/cart',
                 dataType: 'json',
                 success: function (response) {
                   // Render the products in the cart list
@@ -220,7 +221,6 @@
                   $.ajax('/cart', {
                     dataType: 'json',
                     success: function (response) {
-                      // Render the products in the cart list
                       $('.cart .list').html(renderList(response));
                     }
                   });
@@ -241,7 +241,6 @@
                   $.ajax('/', {
                     dataType: 'json',
                     success: function (response) {
-                      // Render the products in the index list
                       $('.index .list').html(renderList(response));
                     }
                   });
@@ -270,7 +269,9 @@
              */
             case '#products':
               $('.products').show();
-              $.ajax('/products', {
+              $.ajax({
+                type: 'get',
+                url: '/products',
                 dataType: 'json',
                 success: function (response) {
                   $('.products .list').html(renderAllProducts(response));
@@ -282,7 +283,7 @@
               });
               break;
             /**
-             * case for adding a new product (admin)
+             * case for displaying add form (admin)
              */
             case '#product':
               $.ajax({
@@ -304,7 +305,7 @@
               });
               break;
             /**
-             * case for editing an existing product (admin)
+             * case for displaying edit form (admin)
              */
             case (window.location.hash.match(/#product\/\d+/) || {}).input:
               $.ajax({
@@ -379,7 +380,9 @@
               // Show the index page
               $('.index').show();
               // Load the index products from the server
-              $.ajax('/', {
+              $.ajax({
+                type: 'get',
+                url: '/',
                 dataType: 'json',
                 success: function (response) {
                   // Render the products in the index list
