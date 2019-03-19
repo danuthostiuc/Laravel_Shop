@@ -6,6 +6,8 @@
 
     <!-- Load the jQuery JS library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -41,33 +43,36 @@
                 '<tr>',
                     '<th>{{ __('Image') }}</th>',
                     '<th>{{ __('Details') }}</th>',
-                    (window.location.hash.match(/#cart/) ? '<th>{{ __("Remove") }}</th>' : '<th>{{ __("Add") }}</th>'),
+                    '<th>' + (window.location.hash.match(/#cart/) ? '{{ __("Remove") }}' : '{{ __("Add") }}') + '</th>',
                 '</tr>'
           ].join('');
 
           $.each(products, function (key, product) {
             html += [
               '<tr>',
-                '<td class="cp_img">' + '<img src=storage/' + product.image + '></td>',
-                '<td class="cp_img">' +
-                    '<ul>' +
-                        '<li>' + product.title + '</li>' +
-                        '<li>' + product.description + '</li>' +
-                        '<li>' + product.price + '</li>' +
-                    '</ul>' +
+                '<td class="cp_img">',
+                    '<img src=storage/' + product.image + '>',
+                '</td>',
+                '<td class="cp_img">',
+                    '<ul>',
+                        '<li>' + product.title + '</li>',
+                        '<li>' + product.description + '</li>',
+                        '<li>' + product.price + '</li>',
+                    '</ul>',
                 '</td>',
 
-                '<td class="cp_img"><a href="' +
-                (window.location.hash.match(/#cart(\/\d+)*/) ? '#cart/' : '#') +
-                product.id +
-                '">' +
-                (window.location.hash.match(/#cart(\/\d+)*/) ? '{{ __("Remove") }}' : '{{ __("Add") }}') +
-                '</a></td>',
-
-                '</tr>'
+                '<td class="cp_img">',
+                    '<a href="',
+                        (window.location.hash.match(/#cart(\/\d+)*/) ? '#cart/' : '#'),
+                        product.id,
+                        '">',
+                        (window.location.hash.match(/#cart(\/\d+)*/) ? '{{ __("Remove") }}' : '{{ __("Add") }}'),
+                    '</a>',
+                '</td>',
+              '</tr>'
             ].join('');
           });
-          html += ['</table>'];
+          html += ['</table>'].join('');
 
           return html;
         }
@@ -77,34 +82,39 @@
             '<tr>',
                 '<th>{{ __('Image') }}</th>',
                 '<th>{{ __('Details') }}</th>',
-                '<th>{{ __('Action') }}',
+                '<th>{{ __('Action') }}</th>',
             '</tr>'
           ].join('');
 
           $.each(products, function (key, product) {
             html += [
               '<tr>',
-                '<td class="cp_img">' + '<img src=storage/' + product.image + '></td>',
-                '<td class="cp_img">' +
-                    '<ul>' +
-                        '<li>' + product.title + '</li>' +
-                        '<li>' + product.description + '</li>' +
-                        '<li>' + product.price + '</li>' +
-                    '</ul>' +
+                '<td class="cp_img">',
+                    '<img src=storage/' + product.image + '>',
+                '</td>',
+                '<td class="cp_img">',
+                    '<ul>',
+                        '<li>' + product.title + '</li>',
+                        '<li>' + product.description + '</li>',
+                        '<li>' + product.price + '</li>',
+                    '</ul>',
                 '</td>',
 
-                '<td class="cp_img"><a href="#product/' +
-                product.id +
-                '">' +
-                '{{ __("Edit") }}' +
-                '</a></td>',
+                '<td class="cp_img">',
+                    '<a href="#product/',
+                        product.id,
+                        '">',
+                        '{{ __("Edit") }}',
+                    '</a>',
+                '</td>',
 
-                '<td class="cp_img"><a href="#products/' +
-                product.id +
-                '">' +
-                '{{ __("Delete") }}' +
-                '</a></td>',
-
+                '<td class="cp_img">',
+                    '<a href="#products/',
+                        product.id,
+                        '">',
+                        '{{ __("Delete") }}',
+                    '</a>',
+                '</td>',
               '</tr>'
             ].join('');
           });
@@ -117,23 +127,23 @@
             html += [
               '<tr>',
                 '<td>',
-                    '<a href="#order/' +
-                    order.id +
-                    '">' +
-                    order.id +
+                    '<a href="#order/',
+                        order.id,
+                        '">',
+                        order.id,
                     '</a>',
                 '</td>',
-                '<td>' +
-                    order.name +
+                '<td>',
+                    order.name,
                 '</td>',
-                '<td>' +
-                    order.email +
+                '<td>',
+                    order.email,
                 '</td>',
-                '<td>' +
-                    order.comment +
+                '<td>',
+                    order.comment,
                 '</td>',
-                '<td>' +
-                    order.total +
+                '<td>',
+                    order.total,
                 '</td>',
               '</tr>'
             ].join('');
@@ -144,20 +154,20 @@
         function renderSingleOrder(order) {
           html = [
             '<tr>',
-                '<td rowspan="' +
-                    order.products.length + 1 +
-                    '" class="cp_img">' +
-                    order.name +
+                '<td rowspan="',
+                    order.products.length + 1,
+                    '" class="cp_img">',
+                    order.name,
                 '</td>',
-                '<td rowspan="' +
-                    order.products.length + 1 +
-                    '" class="cp_img">' +
-                    order.email +
+                '<td rowspan="',
+                    order.products.length + 1,
+                    '" class="cp_img">',
+                    order.email,
                 '</td>',
-                '<td rowspan="' +
-                    order.products.length + 1 +
-                    '" class="cp_img">' +
-                    order.comment +
+                '<td rowspan="',
+                    order.products.length + 1,
+                    '" class="cp_img">',
+                    order.comment,
                 '</td>',
             '</tr>'
           ].join('');
@@ -166,18 +176,18 @@
             html += [
               '<tr>',
                 '<td class="cp_img">',
-                    '<img src="storage/' +
-                    order.image +
+                    '<img src="storage/',
+                    order.image,
                     '"/>',
                 '</td>',
-                '<td class="cp_img">' +
-                    order.title +
+                '<td class="cp_img">',
+                    order.title,
                 '</td>',
-                '<td class="cp_img">' +
-                    order.description +
+                '<td class="cp_img">',
+                    order.description,
                 '</td>',
-                '<td class="cp_img">' +
-                    order.price +
+                '<td class="cp_img">',
+                    order.price,
                 '</td>',
               '</tr>'
             ].join('');
@@ -217,13 +227,7 @@
                 data: {'id': window.location.hash.split('/')[1]},
                 dataType: 'json',
                 success: function () {
-                  $('.cart').show();
-                  $.ajax('/cart', {
-                    dataType: 'json',
-                    success: function (response) {
-                      $('.cart .list').html(renderList(response));
-                    }
-                  });
+                  window.location.hash = "#cart";
                 },
               });
               break;
@@ -237,13 +241,7 @@
                 data: {'id': window.location.hash.split('#')[1]},
                 dataType: 'json',
                 success: function () {
-                  $('.index').show();
-                  $.ajax('/', {
-                    dataType: 'json',
-                    success: function (response) {
-                      $('.index .list').html(renderList(response));
-                    }
-                  });
+                  window.location.hash = "#";
                 },
               });
               break;
@@ -257,7 +255,6 @@
                 dataType: 'json',
                 success: function () {
                   window.location.hash = '#products';
-                  window.onhashchange();
                 },
                 error: function () {
                   $('.login').show();
@@ -278,7 +275,6 @@
                 },
                 error: function () {
                   window.location.hash = '#login';
-                  window.onhashchange();
                 }
               });
               break;
@@ -295,12 +291,11 @@
                   $('input[name=description]').val('');
                   $('input[name=price]').val('');
                   $('input[name=image]').val('');
-                  document.getElementById("image").required = true;
+                  $("#image").prop('required', true);
                   $('.product').show();
                 },
                 error: function () {
                   window.location.hash = '#login';
-                  window.onhashchange();
                 }
               });
               break;
@@ -316,12 +311,11 @@
                   $('input[name=title]').val(product.title);
                   $('input[name=description]').val(product.description);
                   $('input[name=price]').val(product.price);
-                  document.getElementById("image").required = false;
+                  $("#image").prop('required', false);
                   $('.product').show();
                 },
                 error: function () {
                   window.location.hash = '#login';
-                  window.onhashchange();
                 }
               });
               break;
@@ -353,7 +347,6 @@
                 },
                 error: function () {
                   window.location.hash = '#login';
-                  window.onhashchange();
                 }
               });
               break;
@@ -371,7 +364,6 @@
                 },
                 error: function () {
                   window.location.hash = '#login';
-                  window.onhashchange();
                 }
               });
               break;
@@ -407,12 +399,7 @@
             processData: false,
             contentType: false,
             success: function () {
-              $.ajax('/', {
-                dataType: 'json',
-                success: function (response) {
-                  $('.index .list').html(renderList(response));
-                }
-              });
+              $('.cart .list').removeClass("alert alert-danger");
               window.location.hash = '#';
             },
             error: function (data) {
@@ -422,11 +409,10 @@
                   $('.cart .list').addClass("alert alert-danger");
                   if ($.isPlainObject(value)) {
                     $.each(value, function (key, value) {
-                      console.log(key + " " + value);
-                      $('.cart .list').show().append(value + "<br/>");
+                      $('.cart .list').append(value + "<br/>");
                     });
                   } else {
-                    $('.cart .list').show().append(value + "<br/>");
+                    $('.cart .list').append(value + "<br/>");
                   }
                 });
               }
@@ -446,8 +432,8 @@
             processData: false,
             contentType: false,
             success: function () {
+              $('.cart .list').removeClass("alert alert-danger");
               window.location.hash = '#products';
-              window.onhashchange();
             },
             error: function (data) {
               if (data.status === 422) {
@@ -456,12 +442,10 @@
                   $('.login').addClass("alert alert-danger");
                   if ($.isPlainObject(value)) {
                     $.each(value, function (key, value) {
-                      console.log(key + " " + value);
-                      $('.login').show().append(value + "<br/>");
-
+                      $('.login').append(value + "<br/>");
                     });
                   } else {
-                    $('.login').show().append(value + "<br/>");
+                    $('.login').append(value + "<br/>");
                   }
                 });
               }
@@ -478,7 +462,6 @@
             dataType: 'json',
           });
           window.location.hash = '#';
-          window.onhashchange();
         });
 
         /**
@@ -493,8 +476,8 @@
             processData: false,
             contentType: false,
             success: function () {
+              $('.cart .list').removeClass("alert alert-danger");
               window.location.hash = '#products';
-              window.onhashchange();
             },
             error: function (data) {
               if (data.status === 422) {
@@ -503,11 +486,10 @@
                   $('.product .form').addClass("alert alert-danger");
                   if ($.isPlainObject(value)) {
                     $.each(value, function (key, value) {
-                      console.log(key + " " + value);
-                      $('.product .form').show().append(value + "<br/> ");
+                      $('.product .form').append(value + "<br/>");
                     });
                   } else {
-                    $('.product .form').show().append(value + "<br/>");
+                    $('.product .form').append(value + "<br/>");
                   }
                 });
               }
@@ -544,19 +526,19 @@
         @csrf
         <input type="text"
                name="name"
-               value="{{ old("name") }}"
+               value=""
                placeholder="{{ __("Name") }}"
                required>
         <br>
         <input type="text"
                name="email"
-               value="{{ old("email") }}"
+               value=""
                placeholder="{{ __("Contact details") }}"
                required>
         <br>
         <input type="text"
                name="comment"
-               value="{{ old("comment") }}"
+               value=""
                placeholder="{{ __("Comments") }}">
         <br>
         <input type="submit"
@@ -589,13 +571,13 @@
         @csrf
         <input type="text"
                name="username"
-               value="{{ old('username') }}"
+               value=""
                placeholder="{{ __("Username") }}"
                required>
         <br>
         <input type="password"
                name="password"
-               value="{{ old('password') }}"
+               value=""
                placeholder="{{ __("Password") }}"
                required>
         <br>
@@ -614,20 +596,20 @@
         @csrf
         <input type="text"
                name="title"
-               value="{{ old('title') }}"
+               value=""
                placeholder="{{ __("Title") }}"
                required>
         <br>
         <input type="text"
                name="description"
-               value="{{ old('description') }}"
+               value=""
                placeholder="{{ __("Description") }}"
                required>
         <br>
         <input
                 type="number"
                 name="price"
-                value="{{ old('price') }}"
+                value=""
                 placeholder="{{ __("Price") }}"
                 required>
         <br>
